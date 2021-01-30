@@ -38,6 +38,8 @@
                         <ul>
                             <li><a href="tiket.php">Data Helpdesk</a>
                             </li>
+                            <li><a href="input-tiket.php">Buat Tiket Baru</a>
+                            </li>
                         </ul>
                     </div>
                 </li>

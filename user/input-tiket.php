@@ -236,6 +236,8 @@ if (empty($_SESSION['username'])) {
 		<script type="text/javascript" src="js/prism.js"></script>
 		<!--scrollbar-->
 		<script type="text/javascript" src="js/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+		<!-- select2 -->
+		<script type="text/javascript" src="js/plugins/select2/select2.full.min.js"></script>
 		<!-- data-tables -->
 		<script type="text/javascript" src="js/plugins/data-tables/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript" src="js/plugins/data-tables/data-tables-script.js"></script>
@@ -260,6 +262,10 @@ if (empty($_SESSION['username'])) {
 						}
 					}
 				});
+			});
+
+			$(".select2").select2({
+				width: '100%'
 			});
 		</script>
 
