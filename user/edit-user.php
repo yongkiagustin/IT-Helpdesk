@@ -90,11 +90,22 @@ if (empty($_SESSION['username'])) {
             $row = mysqli_fetch_assoc($sql);
           }
           if (isset($_POST['update'])) {
+
+            $gambar = '';
+            if (!empty($_FILES["gambar"]["tmp_name"])) {
+              $namafolder = "gambar_admin/"; //tempat menyimpan file
+              $jenis_gambar = $_FILES['gambar']['type'];
+              if ($jenis_gambar == "image/jpeg" || $jenis_gambar == "image/jpg" || $jenis_gambar == "image/gif" || $jenis_gambar == "image/x-png") {
+                $gambar = $namafolder . basename($_FILES['gambar']['name']);
+                move_uploaded_file($_FILES['gambar']['tmp_name'], $gambar);
+              }
+            }
+
             $username = $_POST['username'];
             $password = $_POST['password'];
             $fullname = $_POST['fullname'];
             $no_hp = $_POST['no_hp'];
-            $update = mysqli_query($koneksi, "UPDATE user SET username='$username', password='$password', fullname='$fullname', no_hp='$no_hp' WHERE user_id='" . $_SESSION['user_id'] . "'") or die("");
+            $update = mysqli_query($koneksi, "UPDATE user SET username='$username', password='$password', fullname='$fullname', no_hp='$no_hp', gambar='$gambar' WHERE user_id='" . $_SESSION['user_id'] . "'") or die("");
             if ($update) {
               $q = mysqli_query($koneksi, "SELECT user.user_id, user.fullname, user.username, user.level, user.gambar, departement.name as departement, departement.id as departement_id FROM user LEFT JOIN departement ON (user.departement_id = departement.id) WHERE user_id='" . $_SESSION['user_id'] . "'");
               $login = mysqli_fetch_array($q);
