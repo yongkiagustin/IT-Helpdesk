@@ -1,174 +1,119 @@
-<!doctype html>
-<html lang="en" class="no-js">
+<!DOCTYPE html>
+<html lang="en">
+
+<!--================================================================================
+	Item Name: Materialize - Material Design Admin Template
+	Version: 1.0
+	Author: GeeksLabs
+	Author URL: http://www.themeforest.net/user/geekslabs
+================================================================================ -->
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="description" content="IT Helpdesk Administrator">
+  <meta name="keywords" content="IT, helpdesk, system">
+  <title>Helpdesk IT</title>
 
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+  <!-- Favicons-->
+  <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+  <!-- Favicons-->
+  <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+  <!-- For iPhone -->
+  <meta name="msapplication-TileColor" content="#00bcd4">
+  <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+  <!-- For Windows Phone -->
 
-	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
-	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
-	<script src="js/modernizr.js"></script> <!-- Modernizr -->
-    <script src="js/jquery-2.1.1.js"></script>
-    
-    <script src="dist/sweetalert-dev.js"></script>
-    <link rel="stylesheet" href="dist/sweetalert.css">
-    
-	<title>Aplikasi Tikecting Helpdesk IT</title>
+
+  <!-- CORE CSS-->
+
+  <link href="admin/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="admin/css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="admin/css/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+  <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
+  <link href="admin/css/prism.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="admin/js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
+
 </head>
-<body>
 
- <?php
- include "conn.php";
- date_default_timezone_set("Asia/Bangkok");
-			if(isset($_POST['input'])){
-			 
-				$id_tiket  = $_POST['id_tiket'];
-				$tanggal   = $_POST['tanggal'];
-				$pc_no     = $_POST['pc_no'];
-                $nama      = $_POST['nama'];
-                $email     = $_POST['email'];
-                $departemen= $_POST['departemen'];
-                $problem   = $_POST['problem'];
-                $none      = "";
-                $open      = "Open";
-                
-    $laporan="<h4><b>Helpdesk Baru : $id_tiket</b></h4>";
-    $laporan .="<br/>";
-	$laporan .="<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"3\" cellspacing=\"0\">";
-	$laporan .="<tr>";
-	$laporan .="<td>Tanggal</td><td>:</td><td>$tanggal</td>";
-	$laporan .="</tr>";
-    $laporan .="<tr>";
-	$laporan .="<td>No Asset Perangkat</td><td>:</td><td>$pc_no</td>";
-	$laporan .="</tr>";
-    $laporan .="<tr>";
-	$laporan .="<td>Nama</td><td>:</td><td>$nama</td>";
-	$laporan .="</tr>";
-    $laporan .="<tr>";
-	$laporan .="<td>Departemen</td><td>:</td><td>$departemen</td>";
-	$laporan .="</tr>";
-    $laporan .="<tr>";
-	$laporan .="<td>Problem</td><td>:</td><td>$problem</td>";
-	$laporan .="</tr>";
-    $laporan .="<tr>";
-	$laporan .="<td>Status/td><td>:</td><td>$open</td>";
-	$laporan .="</tr>";
-    
-                 
-	
-				
-				$cek = mysqli_query($koneksi, "SELECT * FROM tiket WHERE id_tiket='$id_tiket'");
-				if(mysqli_num_rows($cek) == 0){
-						$insert = mysqli_query($koneksi, "INSERT INTO tiket(id_tiket, tanggal, pc_no, nama, email, departemen, problem, penanganan, status)
-															VALUES('$id_tiket','$tanggal','$pc_no','$nama','$email','$departemen','$problem','$none','$open')") or die(mysqli_error());
-						if($insert){
-							echo '<script>sweetAlert({
-	                                                   title: "Berhasil!", 
-                                                        text: "Tiket Berhasil di kirim, tunggu IT datang!", 
-                                                        type: "success"
-                                                        });</script>';
-						}else{
-							echo '<script>sweetAlert({
-	                                                   title: "Gagal!", 
-                                                        text: "Tiket Gagal di kirim, silahakan coba lagi!", 
-                                                        type: "error"
-                                                        });</script>';
-						}
-				}else{
-					echo '<script>sweetAlert({
-	                                                   title: "Gagal!", 
-                                                        text: "Tiket Sudah ada Sebelumnya!", 
-                                                        type: "error"
-                                                        });</script>';
-				}
-            }
-		
-			?>
+<body class="cyan">
+  <!-- Start Page Loading -->
+  <div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+  </div>
+  <!-- End Page Loading -->
 
-	<form class="cd-form floating-labels" method="POST" action="index.php">
-		<fieldset>
-			<legend>Ticketing Helpdesk IT</legend>
-            
-            
-            <li>Isi Ticket dengan baik agar jelas informasinya.</li><br />
-            <li>Ticket diselesaikan oleh IT berdasarkan urutan antrian.</li><br />
 
-            <input type="hidden" name="id_tiket" value="<?php echo date("dmYHis"); ?>" id="id_ticket"/>
-            <input type="hidden" name="tanggal" value="<?php echo date("Y-m-d H:i:sa"); ?>" id="tanggal"/>
-			<div class="icon">
-				<label class="cd-label" for="pc_no">No Asset Perangkat</label>
-				<input class="company" type="text" name="pc_no" id="pc_no" autocomplete="off">
-		    </div> 
 
-		    <div class="icon">
-		    	<label class="cd-label" for="nama">Nama</label>
-				<input class="user" type="text" name="nama" id="nama" autocomplete="off" required="required">
-		    </div> 
-            
-            <div class="icon">
-		    	<label class="cd-label" for="nama">Email</label>
-				<input class="email" type="email" name="email" id="email" autocomplete="off">
-		    </div> 
+  <div id="login-page" class="row">
+    <div class="col s12 z-depth-4 card-panel">
+      <form class="login-form" action="proseslogin.php" method="POST" name="formku" id="formku">
+        <div class="row">
+          <div class="input-field col s12 center">
+            <!-- <img src="images/login-logo.png" alt="" class="circle responsive-img valign profile-image-login"> -->
+            <p class="center login-form-text">Login Helpdesk IT</p>
+          </div>
+        </div>
+        <div class="row margin">
+          <div class="input-field col s12">
+            <i class="mdi-social-person-outline prefix"></i>
+            <input id="username" name="username" type="text" autocomplete="new-password" autofocus="on">
+            <label for="username" class="center-align">Username</label>
+          </div>
+        </div>
+        <div class="row margin">
+          <div class="input-field col s12">
+            <i class="mdi-action-lock-outline prefix"></i>
+            <input id="password" name="password" type="password" autocomplete="off">
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <!-- <div class="row">          
+          <div class="input-field col s12 m12 l12  login-text">
+              <input type="checkbox" id="remember-me" />
+              <label for="remember-me">Remember me</label>
+          </div>
+        </div> -->
+        <div class="row">
+          <div class="input-field col s12">
+            <button type="submit" class="btn waves-effect waves-light col s12" name="login" id="login">Login</button>
+          </div>
+        </div>
+        <!-- <div class="row">
+          <div class="input-field col s6 m6 l6">
+            <p class="margin medium-small"><a href="page-register.html">Register Now!</a></p>
+          </div>
+          <div class="input-field col s6 m6 l6">
+              <p class="margin right-align medium-small"><a href="page-forgot-password.html">Forgot password ?</a></p>
+          </div>          
+        </div> -->
+        <center>Copyright &copy; Yongki Agustin<br /><br /></center>
+      </form>
+    </div>
 
-		    <div class="icon">
-		    	<label class="cd-label" for="cd-email">Departemen</label>
-				<select class="email" name="departemen" id="departemen" required>
-                <option value=""></option>
-                <option value="IT">IT</option>
-                <option value="Store">Store</option>
-                <option value="Finance & Accounting">Finance & Accounting</option>
-                <option value="HRD & GA">HRD & GA</option>
-                <option value="Produksi">Produksi</option>
-                <option value="DC">DC</option>
-                </select>
-		    </div>
-            
-            <div class="icon">
-				<label class="cd-label" for="cd-textarea">Problem / Case</label>
-      			<textarea class="message" name="problem" id="problem" required></textarea>
-			</div>
-            
-           	<div>
-            <a href="datatiket.php">Data Ticket</a>
-		      	<input type="submit" onclick="notifikasi()" name="input" id="input" value="Send Message">
-		    </div>
-		</fieldset>
-		
-	</form>
-<center>Copyright &copy; Yongki Agustin</center><br /><br />
-<script src="js/main.js"></script> <!-- Resource jQuery -->
 
-           <!-- <script>
-  sweetAlert("Hello world!");
-  </script> --> 
-  
-<script>
-            $(document).ready(function() {
-                  if (Notification.permission !== "granted")
-                    Notification.requestPermission();
-            });
-             
-            function notifikasi() {
-                if (!Notification) {
-                    alert('Browsermu tidak mendukung Web Notification.'); 
-                    return;
-                }
-                if (Notification.permission !== "granted")
-                    Notification.requestPermission();
-                else {
-                    var notifikasi = new Notification('IT Helpdesk Tiket', {
-                        icon: 'img/logo.jpg',
-                        body: "Helpdesk Baru dari <?php echo $nama; ?>",
-                    });
-                    notifikasi.onclick = function () {
-                        window.open("http://tsuchiya-mfg.com");      
-                    };
-                    setTimeout(function(){
-                        notifikasi.close();
-                    }, 1000);
-                }
-            };
-</script>
+
+    <!-- ================================================
+    Scripts
+    ================================================ -->
+
+    <!-- jQuery Library -->
+    <script type="text/javascript" src="admin/js/jquery-1.11.2.min.js"></script>
+    <!--materialize js-->
+    <script type="text/javascript" src="admin/js/materialize.js"></script>
+    <!--prism-->
+    <script type="text/javascript" src="admin/js/prism.js"></script>
+    <!--scrollbar-->
+    <script type="text/javascript" src="admin/js/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+    <!--plugins.js - Some Specific JS codes for Plugin Settings-->
+    <script type="text/javascript" src="admin/js/plugins.js"></script>
+
 </body>
+
 </html>

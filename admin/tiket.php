@@ -43,7 +43,7 @@ if (empty($_SESSION['username'])){
       <?php include "menu.php"; ?>
        <?php
 $timeout = 10; // Set timeout minutes
-$logout_redirect_url = "../login.html"; // Set logout URL
+$logout_redirect_url = "../index.php"; // Set logout URL
 
 $timeout = $timeout * 60; // Converts minutes to seconds
 if (isset($_SESSION['start_time'])) {
