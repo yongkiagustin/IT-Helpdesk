@@ -1704,6 +1704,7 @@ footer.page-footer {
   border-top: none !important;
   border-radius: 0px !important;
   height: 3rem !important;
+  margin-top: 8px !important;
 }
 
 .select2-dropdown {

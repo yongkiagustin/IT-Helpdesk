@@ -1,8 +1,4 @@
 <?php
-session_start();
-if (empty($_SESSION['username']))
-	header('location:../index.php');
-
 /* Database connection start */
 $servername = "localhost";
 $username = "root";
@@ -19,18 +15,12 @@ $requestData = $_REQUEST;
 
 $columns = array(
 	// datatable column index  => database column name
-	0 => 'id_tiket',
-	1 => 'tanggal',
-	2 => 'asset_id',
-	3 => 'fullname',
-	4 => 'email',
-	5 => 'problem',
-	6 => 'penanganan',
-	7 => 'status'
+	0 => 'id',
+	1 => 'name'
 );
 
 // getting total number records without any search
-$sql = "SELECT id_tiket, tanggal, asset.asset_id as pc_no, fullname as name, email, problem, penanganan, status FROM tiket JOIN user ON (tiket.user_id = user.user_id) JOIN asset ON (tiket.pc_no = asset.id) WHERE user.departement_id = " . $_SESSION['departement_id'];
+$sql = "SELECT * FROM departement";
 $query = mysqli_query($conn, $sql) or die("ajax-grid-data.php: get Tiket");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
@@ -38,15 +28,9 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 if (!empty($requestData['search']['value'])) {
 	// if there is a search parameter
-	$sql = "SELECT id_tiket, tanggal, asset.asset_id as pc_no, fullname as name, email, problem, penanganan, status FROM tiket JOIN user ON (tiket.user_id = user.user_id) JOIN asset ON (tiket.pc_no = asset.id) WHERE user.departement_id = " . $_SESSION['departement_id'];
-	$sql .= " AND id_tiket LIKE '" . $requestData['search']['value'] . "%' ";    // $requestData['search']['value'] contains search parameter
-	$sql .= " OR tanggal LIKE '" . $requestData['search']['value'] . "%' ";
-	$sql .= " OR asset_id LIKE '" . $requestData['search']['value'] . "%' ";
-	$sql .= " OR fullname LIKE '" . $requestData['search']['value'] . "%' ";
-	$sql .= " OR email LIKE '" . $requestData['search']['value'] . "%' ";
-	$sql .= " OR problem LIKE '" . $requestData['search']['value'] . "%' ";
-	$sql .= " OR penanganan LIKE '" . $requestData['search']['value'] . "%' ";
-	$sql .= " OR status LIKE '" . $requestData['search']['value'] . "%' ";
+	$sql = "SELECT * FROM departement";
+	$sql .= " WHERE id LIKE '" . $requestData['search']['value'] . "%' ";    // $requestData['search']['value'] contains search parameter
+	$sql .= " OR name LIKE '" . $requestData['search']['value'] . "%' ";
 	$query = mysqli_query($conn, $sql) or die("ajax-grid-data.php: 1");
 	$totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result without limit in the query 
 
@@ -55,7 +39,7 @@ if (!empty($requestData['search']['value'])) {
 
 } else {
 
-	$sql = "SELECT id_tiket, tanggal, asset.asset_id as pc_no, fullname as name, email, problem, penanganan, status FROM tiket JOIN user ON (tiket.user_id = user.user_id) JOIN asset ON (tiket.pc_no = asset.id) WHERE user.departement_id = " . $_SESSION['departement_id'];
+	$sql = "SELECT * FROM departement";
 	$sql .= " ORDER BY " . $columns[$requestData['order'][0]['column']] . "   " . $requestData['order'][0]['dir'] . "   LIMIT " . $requestData['start'] . " ," . $requestData['length'] . "   ";
 	$query = mysqli_query($conn, $sql) or die("ajax-grid-data.php: 3");
 }
@@ -64,14 +48,14 @@ $data = array();
 while ($row = mysqli_fetch_array($query)) {  // preparing an array
 	$nestedData = array();
 
-	$nestedData[] = $row["id_tiket"];
-	$nestedData[] = $row["tanggal"];
-	$nestedData[] = $row["pc_no"];
+	$nestedData[] = $row["id"];
 	$nestedData[] = $row["name"];
-	$nestedData[] = $row["email"];
-	$nestedData[] = $row["problem"];
-	$nestedData[] = $row["penanganan"];
-	$nestedData[] = $row["status"];
+	$nestedData[] = '<td><center>
+                     <a href="edit-departement.php?id=' . $row['id'] . '" style="color:#eee;"  data-toggle="tooltip" title="Edit" class="btn-floating waves-effect waves-light light-blue darken-3"><i class="mdi-editor-mode-edit"></i> </a>
+				     <a href="departement.php?aksi=delete&id=' . $row['id'] . '"  data-toggle="tooltip" title="Delete" onclick="return confirm(\'Anda yakin akan menghapus data ' . $row['id'] . '?\')" class="btn-floating waves-effect waves-light red"><i class="mdi-action-delete"></i> </a>
+	                 </center></td>';
+
+
 	//$nestedData[] = number_format($total,0,",",".");		
 
 	$data[] = $nestedData;

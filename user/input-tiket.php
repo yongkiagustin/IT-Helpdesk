@@ -105,6 +105,8 @@ if (empty($_SESSION['username'])) {
 	                                                   title: "Berhasil!", 
                                                         text: "Tiket Berhasil di kirim, tunggu IT datang!", 
                                                         type: "success"
+                                                        },function(){
+                                                            window.location.replace("tiket.php");
                                                         });</script>';
 							} else {
 								echo '<script>sweetAlert({
@@ -171,7 +173,7 @@ if (empty($_SESSION['username'])) {
 													<?php
 													$asset = mysqli_query($koneksi, "SELECT * FROM asset");
 													foreach (mysqli_fetch_all($asset) as $asset) {
-														echo "<option value='" . $asset[0] . "'>" . $asset[0]  . " / " . $asset[1] . "</option>";
+														echo "<option value='" . $asset[2] . "'>" . $asset[0]  . " / " . $asset[1] . "</option>";
 													}
 													?>
 												</select>

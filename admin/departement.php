@@ -68,10 +68,10 @@ if (empty($_SESSION['username'])) {
           <div class="container">
             <div class="row">
               <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Data Tiket IT Helpdesk</h5>
+                <h5 class="breadcrumbs-title">Data Departemen IT Helpdesk</h5>
                 <ol class="breadcrumb">
                   <li><a href="index.php">Dashboard</a></li>
-                  <li><a href="tiket.php">Tiket</a></li>
+                  <li><a href="departement.php">Departemen</a></li>
                 </ol>
               </div>
             </div>
@@ -91,21 +91,25 @@ if (empty($_SESSION['username'])) {
           <?php
           if (isset($_GET['aksi']) == 'delete') {
             $id = $_GET['id'];
-            $cek = mysqli_query($koneksi, "SELECT * FROM tiket WHERE id_tiket='$id'");
+            $cek = mysqli_query($koneksi, "SELECT * FROM departement WHERE id='$id'");
             if (mysqli_num_rows($cek) == 0) {
               echo '<script>sweetAlert({
 	                                                   title: "Ups!", 
-                                                        text: "Data tiket tidak ditemukan!", 
+                                                        text: "Data departement tidak ditemukan!", 
                                                         type: "error"
-                                                        });</script>';
+                                                        },function(){
+                                                          window.location.replace("asset.php");
+                                                      });</script>';
             } else {
-              $delete = mysqli_query($koneksi, "DELETE FROM tiket WHERE id_tiket='$id'");
+              $delete = mysqli_query($koneksi, "DELETE FROM departement WHERE id='$id'");
               if ($delete) {
                 echo '<script>sweetAlert({
-	                                                   title: "Berhasil!", 
+	                                                   title: "Berhasil", 
                                                         text: "Data Berhasil di hapus!", 
                                                         type: "success"
-                                                        });</script>';
+                                                        },function(){
+                                                          window.location.replace("asset.php");
+                                                      });</script>';
               } else {
                 echo '<script>sweetAlert({
 	                                                   title: "Gagal!", 
@@ -119,26 +123,16 @@ if (empty($_SESSION['username'])) {
           <div id="table-datatables">
             <h4 class="header"></h4>
             <!-- <a href="input-tiket.php" class="btn-floating btn-small waves-effect waves-light green darken-2" title="Tambah Tiket"><i class="mdi-content-add"></i></a>-->
-            <a href="tiket-export-xls.php" class="btn-floating btn-small waves-effect waves-light orange darken-2" title="Export Excel"><i class="mdi-content-content-copy"></i></a>
+            <a href="input-departement.php" class="btn-floating btn-small waves-effect waves-light teal darken-2" title="Input Aset"><i class="mdi-content-add "></i></a>
             <br /><br />
             <div class="row">
               <div class="col s12 m12">
                 <table id="lookup" class="responsive-table display" cellspacing="0">
                   <thead>
                     <tr>
-
-                      <th>Id Tiket</th>
-                      <th>Tanggal</th>
-                      <th>No Asset Perangkat</th>
+                      <th>Id</th>
                       <th>Nama</th>
-                      <th>Email</th>
-                      <th>Departemen</th>
-                      <th>Problem</th>
-                      <th>Penanganan  </th>
-                      <th>Status</th>
                       <th>Tool</th>
-
-
                     </tr>
                   </thead>
 
@@ -149,9 +143,6 @@ if (empty($_SESSION['username'])) {
               </div>
             </div>
           </div>
-
-
-
 
         </div>
 
@@ -202,13 +193,12 @@ if (empty($_SESSION['username'])) {
           "processing": true,
           "serverSide": true,
           "ajax": {
-            url: "ajax-grid-data1.php", // json datasource
+            url: "ajax-grid-data4.php", // json datasource
             type: "post", // method  , by default get
             error: function() { // error handling
               $(".lookup-error").html("");
               $("#lookup").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
               $("#lookup_processing").css("display", "none");
-
             }
           }
         });

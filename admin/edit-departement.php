@@ -68,10 +68,10 @@ if (empty($_SESSION['username'])) {
           <div class="container">
             <div class="row">
               <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Data Tiket IT Helpdesk</h5>
+                <h5 class="breadcrumbs-title">Data Departemen IT Helpdesk</h5>
                 <ol class="breadcrumb">
                   <li><a href="index.php">Dashboard</a></li>
-                  <li><a href="tiket.php">Tiket</a></li>
+                  <li><a href="departement.php">Departemen</a></li>
                 </ol>
               </div>
             </div>
@@ -82,84 +82,70 @@ if (empty($_SESSION['username'])) {
 
         <!--start container-->
         <div class="container">
-          <!-- <div class="section">
-
-            <p class="caption">Tables are a nice way to organize a lot of data. We provide a few utility classes to help you style your table as easily as possible. In addition, to improve mobile experience, all tables on mobile-screen widths are centered automatically.</p>
-            <div class="divider"></div> -->
-
-          <!--DataTables example-->
           <?php
-          if (isset($_GET['aksi']) == 'delete') {
-            $id = $_GET['id'];
-            $cek = mysqli_query($koneksi, "SELECT * FROM tiket WHERE id_tiket='$id'");
-            if (mysqli_num_rows($cek) == 0) {
+          $kd = $_GET['id'];
+          $sql = mysqli_query($koneksi, "SELECT * FROM departement WHERE id = '$kd'");
+          if (mysqli_num_rows($sql) == 0) {
+            header("Location: tiket.php");
+          } else {
+            $row = mysqli_fetch_assoc($sql);
+          }
+
+          if (isset($_POST['update'])) {
+            $name = $_POST['name'];
+
+            $update = mysqli_query($koneksi, "UPDATE departement SET name='$name'  WHERE id='$kd'") or die(mysqli_error());
+            if ($update) {
               echo '<script>sweetAlert({
-	                                                   title: "Ups!", 
-                                                        text: "Data tiket tidak ditemukan!", 
-                                                        type: "error"
-                                                        });</script>';
-            } else {
-              $delete = mysqli_query($koneksi, "DELETE FROM tiket WHERE id_tiket='$id'");
-              if ($delete) {
-                echo '<script>sweetAlert({
 	                                                   title: "Berhasil!", 
-                                                        text: "Data Berhasil di hapus!", 
+                                                        text: "Departemen Berhasil di update!", 
                                                         type: "success"
-                                                        });</script>';
-              } else {
-                echo '<script>sweetAlert({
+                                                        },function(){
+                                                          window.location.replace("departement.php");
+                                                      });</script>';
+            } else {
+              echo '<script>sweetAlert({
 	                                                   title: "Gagal!", 
-                                                        text: "Data gagal di hapus!", 
+                                                        text: "Departemen Gagal di update, silahakan coba lagi!", 
                                                         type: "error"
                                                         });</script>';
-              }
             }
           }
+
+
           ?>
-          <div id="table-datatables">
-            <h4 class="header"></h4>
-            <!-- <a href="input-tiket.php" class="btn-floating btn-small waves-effect waves-light green darken-2" title="Tambah Tiket"><i class="mdi-content-add"></i></a>-->
-            <a href="tiket-export-xls.php" class="btn-floating btn-small waves-effect waves-light orange darken-2" title="Export Excel"><i class="mdi-content-content-copy"></i></a>
-            <br /><br />
-            <div class="row">
-              <div class="col s12 m12">
-                <table id="lookup" class="responsive-table display" cellspacing="0">
-                  <thead>
-                    <tr>
-
-                      <th>Id Tiket</th>
-                      <th>Tanggal</th>
-                      <th>No Asset Perangkat</th>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>Departemen</th>
-                      <th>Problem</th>
-                      <th>Penanganan  </th>
-                      <th>Status</th>
-                      <th>Tool</th>
-
-
-                    </tr>
-                  </thead>
-
-                  <tbody>
-
-                  </tbody>
-                </table>
+          <div class="col s8 m8 l6">
+            <div class="card-panel">
+              <h4 class="header2">Edit Departemen</h4>
+              <div class="row">
+                <form action="" method="post" enctype="multipart/form-data" name="form1" id="form1" class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <!-- <i class="mdi-action-alarm-on prefix"></i> -->
+                      <input id="tanggal" name="name" value="<?php echo $row['name']; ?>" type="text">
+                      <label for="Tanggal">Nama</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <button class="btn cyan waves-effect waves-light right" type="submit" name="update" id="update">Submit
+                        <i class="mdi-content-send right"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
-
-
-
-
         </div>
 
       </div>
-      <!--end container-->
 
-      </section>
-      <!-- END CONTENT -->
+    </div>
+    <!--end container-->
+
+    </section>
+    <!-- END CONTENT -->
     </div>
     <!-- END WRAPPER -->
 
@@ -179,7 +165,7 @@ if (empty($_SESSION['username'])) {
     <!-- ================================================
     Scripts
     ================================================ -->
-    !-- jQuery Library -->
+    <!-- jQuery Library -->
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <!--materialize js-->
     <script type="text/javascript" src="js/materialize.js"></script>
@@ -187,6 +173,8 @@ if (empty($_SESSION['username'])) {
     <script type="text/javascript" src="js/prism.js"></script>
     <!--scrollbar-->
     <script type="text/javascript" src="js/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <!-- select2 -->
+    <script type="text/javascript" src="js/plugins/select2/select2.full.min.js"></script>
     <!-- data-tables -->
     <script type="text/javascript" src="js/plugins/data-tables/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="js/plugins/data-tables/data-tables-script.js"></script>
@@ -212,6 +200,15 @@ if (empty($_SESSION['username'])) {
             }
           }
         });
+
+      });
+
+      $(".select2").select2({
+        width: "100%"
+      });
+
+      var picker = $(".datepicker").pickadate({
+        format: "yyyy-mm-dd"
       });
     </script>
 
