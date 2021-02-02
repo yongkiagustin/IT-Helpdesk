@@ -93,7 +93,7 @@ if (empty($_SESSION['username'])) {
 
             $gambar = '';
             if (!empty($_FILES["gambar"]["tmp_name"])) {
-              $namafolder = "gambar_admin/"; //tempat menyimpan file
+              $namafolder = "../foto/"; //tempat menyimpan file
               $jenis_gambar = $_FILES['gambar']['type'];
               if ($jenis_gambar == "image/jpeg" || $jenis_gambar == "image/jpg" || $jenis_gambar == "image/gif" || $jenis_gambar == "image/x-png") {
                 $gambar = $namafolder . basename($_FILES['gambar']['name']);

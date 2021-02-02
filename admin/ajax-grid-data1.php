@@ -25,8 +25,15 @@ $columns = array(
 	7 => 'status'
 );
 
+$condition = ' WHERE 1=1 ';
+if (!empty($requestData['search_date'])) {
+	$date = $requestData['search_date'];
+	$condition .= " AND (tanggal LIKE '%$date%' OR tanggal_penanganan LIKE '%$date%') ";
+}
+
 // getting total number records without any search
-$sql = "SELECT id_tiket, tanggal, asset_id as pc_no, fullname, email, departement.name as departement, problem, penanganan, status FROM tiket JOIN user on (tiket.user_id = user.user_id) JOIN departement on (user.departement_id = departement.id) JOIN asset ON (tiket.pc_no = asset.id)";
+$sql = "SELECT id_tiket, tanggal, asset_id as pc_no, user.fullname, departement.name as departement, problem, penanganan, admin.fullname as penanggung_jawab, tanggal_penanganan status FROM tiket JOIN user on (tiket.user_id = user.user_id) JOIN departement on (user.departement_id = departement.id) JOIN asset ON (tiket.pc_no = asset.id) JOIN user AS admin ON (admin.user_id = tiket.penanggung_jawab)";
+$sql .= $condition;
 $query = mysqli_query($conn, $sql) or die("ajax-grid-data.php: get Tiket");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
@@ -34,15 +41,17 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 
 if (!empty($requestData['search']['value'])) {
 	// if there is a search parameter
-	$sql = "SELECT id_tiket, tanggal, asset_id as pc_no, fullname, email, departement.name as departement, problem, penanganan, status FROM tiket JOIN user on (tiket.user_id = user.user_id) JOIN departement on (user.departement_id = departement.id) JOIN asset ON (tiket.pc_no = asset.id)";
-	$sql .= " WHERE id_tiket LIKE '" . $requestData['search']['value'] . "%' ";    // $requestData['search']['value'] contains search parameter
+	$sql = "SELECT id_tiket, tanggal, asset_id as pc_no, user.fullname, departement.name as departement, problem, penanganan, admin.fullname as penanggung_jawab, tanggal_penanganan, status FROM tiket JOIN user on (tiket.user_id = user.user_id) JOIN departement on (user.departement_id = departement.id) JOIN asset ON (tiket.pc_no = asset.id) JOIN user AS admin ON (admin.user_id = tiket.penanggung_jawab)";
+	$sql .= $condition;
+	$sql .= " OR id_tiket LIKE '" . $requestData['search']['value'] . "%' ";    // $requestData['search']['value'] contains search parameter
 	$sql .= " OR tanggal LIKE '" . $requestData['search']['value'] . "%' ";
 	$sql .= " OR asset_id LIKE '" . $requestData['search']['value'] . "%' ";
 	$sql .= " OR fullname LIKE '" . $requestData['search']['value'] . "%' ";
-	$sql .= " OR email LIKE '" . $requestData['search']['value'] . "%' ";
 	$sql .= " OR departement.name LIKE '" . $requestData['search']['value'] . "%' ";
+	$sql .= " OR tanggal_penanganan LIKE '" . $requestData['search']['value'] . "%' ";
 	$sql .= " OR problem LIKE '" . $requestData['search']['value'] . "%' ";
 	$sql .= " OR status LIKE '" . $requestData['search']['value'] . "%' ";
+
 	// echo $sql;
 	$query = mysqli_query($conn, $sql) or die("ajax-grid-data.php: 1");
 	$totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result without limit in the query 
@@ -52,7 +61,8 @@ if (!empty($requestData['search']['value'])) {
 
 } else {
 
-	$sql = "SELECT id_tiket, tanggal, asset_id as pc_no, fullname, email, departement.name as departement, problem, penanganan, status FROM tiket JOIN user on (tiket.user_id = user.user_id) JOIN departement on (user.departement_id = departement.id) JOIN asset ON (tiket.pc_no = asset.id)";
+	$sql = "SELECT id_tiket, tanggal, asset_id as pc_no, user.fullname, departement.name as departement, problem, penanganan, admin.fullname as penanggung_jawab, tanggal_penanganan, status FROM tiket JOIN user on (tiket.user_id = user.user_id) JOIN departement on (user.departement_id = departement.id) JOIN asset ON (tiket.pc_no = asset.id) JOIN user AS admin ON (admin.user_id = tiket.penanggung_jawab)";
+	$sql .= $condition;
 	$sql .= " ORDER BY " . $columns[$requestData['order'][0]['column']] . "   " . $requestData['order'][0]['dir'] . "   LIMIT " . $requestData['start'] . " ," . $requestData['length'] . "   ";
 	$query = mysqli_query($conn, $sql) or die("ajax-grid-data.php: 3");
 }
@@ -65,10 +75,11 @@ while ($row = mysqli_fetch_array($query)) {  // preparing an array
 	$nestedData[] = $row["tanggal"];
 	$nestedData[] = $row["pc_no"];
 	$nestedData[] = $row["fullname"];
-	$nestedData[] = $row["email"];
 	$nestedData[] = $row["departement"];
 	$nestedData[] = $row["problem"];
 	$nestedData[] = $row["penanganan"];
+	$nestedData[] = $row["penanggung_jawab"];
+	$nestedData[] = $row["tanggal_penanganan"];
 	$nestedData[] = $row["status"];
 	$nestedData[] = '<td><center>
                      <a href="edit-tiket.php?id=' . $row['id_tiket'] . '" style="color:#eee;"  data-toggle="tooltip" title="Edit" class="btn-floating waves-effect waves-light light-blue darken-3"><i class="mdi-editor-mode-edit"></i> </a>

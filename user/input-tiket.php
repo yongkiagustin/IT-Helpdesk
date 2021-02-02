@@ -89,7 +89,6 @@ if (empty($_SESSION['username'])) {
 						$tanggal   = $_POST['tanggal'];
 						$pc_no     = $_POST['pc_no'];
 						$user_id      = $_SESSION['user_id'];
-						$email     = $_POST['email'];
 						$departemen = $_SESSION['departement'];
 						$problem   = $_POST['problem'];
 						$none      = "";
@@ -98,8 +97,8 @@ if (empty($_SESSION['username'])) {
 
 						$cek = mysqli_query($koneksi, "SELECT * FROM tiket WHERE id_tiket='$id_tiket'");
 						if (mysqli_num_rows($cek) == 0) {
-							$insert = mysqli_query($koneksi, "INSERT INTO tiket(id_tiket, tanggal, pc_no, user_id, email, departemen, problem, penanganan, status)
-															VALUES('$id_tiket','$tanggal','$pc_no','$user_id','$email','$departemen','$problem','$none','$open')") or die(mysqli_error());
+							$insert = mysqli_query($koneksi, "INSERT INTO tiket(id_tiket, tanggal, pc_no, user_id, departemen, problem, penanganan, status)
+															VALUES('$id_tiket','$tanggal','$pc_no','$user_id','$departemen','$problem','$none','$open')") or die(mysqli_error());
 							if ($insert) {
 								echo '<script>sweetAlert({
 	                                                   title: "Berhasil!", 
@@ -140,7 +139,7 @@ if (empty($_SESSION['username'])) {
 									<div class="row">
 										<div class="input-field col s12">
 											<i class="mdi-action-alarm-on prefix"></i>
-											<input id="tanggal" name="tanggal" value="<?php echo date("Y-m-d"); ?>" type="text" readonly="readonly">
+											<input id="tanggal" name="tanggal" value="<?php echo date("Y-m-d H:i:s"); ?>" type="text" readonly="readonly">
 											<label for="Tanggal">Tanggal</label>
 										</div>
 									</div>
@@ -156,13 +155,6 @@ if (empty($_SESSION['username'])) {
 											<i class="mdi-action-lock-outline prefix"></i>
 											<input id="departemen" name="departemen" value="<?= $_SESSION['departement']; ?>" type="text" autocomplete="off" readonly="readonly">
 											<label for="Departemen">Departemen</label>
-										</div>
-									</div>
-									<div class="row">
-										<div class="input-field col s12">
-											<i class="mdi-communication-email prefix"></i>
-											<input id="email" name="email" type="email" required="required" autocomplete="off">
-											<label for="Email">Email</label>
 										</div>
 									</div>
 									<div class="row">

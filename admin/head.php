@@ -31,6 +31,7 @@
   <link href="js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="js/plugins/data-tables/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="js/plugins/select2/select2.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="js/plugins/timepicker/css/timepicker.min.css" type="text/css" rel="stylesheet" media="screen,projection">
 
 
   <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->

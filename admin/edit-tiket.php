@@ -19,7 +19,7 @@ if (empty($_SESSION['username'])) {
 
   <body>
     <!-- Start Page Loading -->
-    <div id="loader-wrapper">
+    <div id="loader-wrapper" style="z-index: 10000;">
       <div id="loader"></div>
       <div class="loader-section section-left"></div>
       <div class="loader-section section-right"></div>
@@ -99,7 +99,7 @@ if (empty($_SESSION['username'])) {
           if (isset($_POST['update'])) {
             $id_tiket  = $_POST['id_tiket'];
             $penanggung_jawab = $_POST['penanggung_jawab'];
-            $tanggal_penanganan = $_POST['tanggal_penanganan'];
+            $tanggal_penanganan = $_POST['tanggal_penanganan'] . " " . $_POST['waktu_penanganan'];
             $penanganan = $_POST['penanganan'];
             $status = $_POST['status'];
 
@@ -107,7 +107,7 @@ if (empty($_SESSION['username'])) {
             if ($update) {
               echo '<script>sweetAlert({
 	                                                   title: "Berhasil!", 
-                                                        text: "Tiket Berhasil di update!", 
+                                                        text: "Tiket Berhasil di update!' . $tanggal_penanganan . '", 
                                                         type: "success"
                                                         },function(){
                                                           window.location.replace("tiket.php");
@@ -157,13 +157,6 @@ if (empty($_SESSION['username'])) {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="input-field col s12">
-                      <!-- <i class="mdi-communication-email prefix"></i> -->
-                      <input id="email" name="email" value="<?php echo $row['email']; ?>" type="email" readonly="readonly">
-                      <label for="Email">Email</label>
-                    </div>
-                  </div>
-                  <div class="row">
                     <div class="input-field col s8">
                       <!-- <i class="mdi-action-lock-outline prefix"></i> -->
                       <input id="departemen" name="departemen" value="<?php echo $row['departemen']; ?>" type="text" readonly="readonly">
@@ -197,6 +190,12 @@ if (empty($_SESSION['username'])) {
                     <div class="input-field col s12">
                       <input id="tanggal_penanganan" name="tanggal_penanganan" class="datepicker" type="text">
                       <label for="tanggal_penanganan">Tanggal Penanganan</label>
+                    </div>
+                  </div>
+                  <div class="row" style="margin-top: 8px;">
+                    <div class="input-field col s12">
+                      <input id="waktu_penanganan" name="waktu_penanganan" class="timepicker" type="text">
+                      <label for="waktu_penanganan">Waktu Penanganan</label>
                     </div>
                   </div>
                   <div class="row">
@@ -263,7 +262,7 @@ if (empty($_SESSION['username'])) {
     <!-- jQuery Library -->
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <!--materialize js-->
-    <script type="text/javascript" src="js/materialize.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
     <!--prism-->
     <script type="text/javascript" src="js/prism.js"></script>
     <!--scrollbar-->
@@ -275,6 +274,7 @@ if (empty($_SESSION['username'])) {
     <script type="text/javascript" src="js/plugins/data-tables/data-tables-script.js"></script>
     <!-- chartist -->
     <script type="text/javascript" src="js/plugins/chartist-js/chartist.min.js"></script>
+    <script type="text/javascript" src="js/plugins/timepicker/js/timepicker.min.js"></script>
 
     <!--plugins.js - Some Specific JS codes for Plugin Settings-->
     <script type="text/javascript" src="js/plugins.js"></script>
@@ -295,14 +295,14 @@ if (empty($_SESSION['username'])) {
             }
           }
         });
-
       });
 
       $(".select2").select2({
         width: "100%"
       });
 
-      var picker = $(".datepicker").pickadate({
+      $(".timepicker").timepicker();
+      $(".datepicker").pickadate({
         format: "yyyy-mm-dd"
       });
     </script>

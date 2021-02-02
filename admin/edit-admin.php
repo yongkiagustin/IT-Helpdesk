@@ -94,28 +94,28 @@ if (empty($_SESSION['username'])) {
 
             $gambar = '';
             if (!empty($_FILES["gambar"]["tmp_name"])) {
-              $namafolder = "gambar_admin/"; //tempat menyimpan file
+              $namafolder = "../foto/"; //tempat menyimpan file
               $jenis_gambar = $_FILES['gambar']['type'];
               if ($jenis_gambar == "image/jpeg" || $jenis_gambar == "image/jpg" || $jenis_gambar == "image/gif" || $jenis_gambar == "image/x-png") {
                 $gambar = $namafolder . basename($_FILES['gambar']['name']);
                 move_uploaded_file($_FILES['gambar']['tmp_name'], $gambar);
               }
             }
-
-            $user_id = $_POST['user_id'];
             $username = $_POST['username'];
-            $password = $_POST['password'];
             $fullname = $_POST['fullname'];
             $no_hp = $_POST['no_hp'];
             $level = $_POST['level'];
+            $departement = $_POST['departement_id'];
 
-            $update = mysqli_query($koneksi, "UPDATE user SET username='$tanggal', password='$pc_no', fullname='$nama', no_hp='$email', level='$departemen', gambar='$gambar' WHERE user_id='$kd'") or die(mysqli_error());
+            $update = mysqli_query($koneksi, "UPDATE user SET username='$username', fullname='$fullname', no_hp='$no_hp', level='$level', departement_id='$departement',gambar='$gambar' WHERE user_id='$kd'") or die(mysqli_error());
             if ($update) {
               echo '<script>sweetAlert({
 	                                                   title: "Berhasil!", 
                                                         text: "Data Berhasil di update!", 
                                                         type: "success"
-                                                        });</script>';
+                                                        }, function(){
+                                                          window.location.replace("admin.php");
+                                                          });</script>';
             } else {
               echo '<script>sweetAlert({
 	                                                   title: "Gagal!", 
@@ -145,12 +145,6 @@ if (empty($_SESSION['username'])) {
                   </div>
                   <div class="row">
                     <div class="input-field col s12">
-                      <input id="password" name="password" type="text" value="<?php echo $row['password'] ?>" autocomplete="off" required="required">
-                      <label for="Password">Password</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="input-field col s12">
                       <input id="fullname" name="fullname" type="text" value="<?php echo $row['fullname'] ?>" autocomplete="off" required="required">
                       <label for="Nama">Nama</label>
                     </div>
@@ -159,6 +153,18 @@ if (empty($_SESSION['username'])) {
                     <div class="input-field col s12">
                       <input id="no_hp" name="no_hp" type="text" value="<?php echo $row['no_hp'] ?>" autocomplete="off" required="required">
                       <label for="No Hp">No HP</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <select class="select2 form-control" name="departement_id">
+                        <?php
+                        $asset = mysqli_query($koneksi, "SELECT * FROM departement");
+                        foreach (mysqli_fetch_all($asset) as $asset) {
+                          echo "<option value='" . $asset[0] . "'> Departemen " . $asset[1] . "</option>";
+                        }
+                        ?>
+                      </select>
                     </div>
                   </div>
                   <div class="row">
@@ -183,7 +189,7 @@ if (empty($_SESSION['username'])) {
                   </div>
                   <div class="row">
                     <div class="input-field col s12">
-                      <button class="btn cyan waves-effect waves-light right" type="submit" name="input" id="update">Submit</button>
+                      <button class="btn cyan waves-effect waves-light right" type="submit" name="update" id="update">Submit</button>
                       <a href="admin.php" style="margin-right=20px" class="btn orange waves-effect waves-light right" type="submit" name="input" id="update">Kembali
                       </a>
                     </div>
@@ -257,6 +263,11 @@ if (empty($_SESSION['username'])) {
             }
           }
         });
+      });
+
+
+      $(".select2").select2({
+        width: "100%"
       });
     </script>
 

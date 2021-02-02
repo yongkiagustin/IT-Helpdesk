@@ -1711,3 +1711,7 @@ footer.page-footer {
   border: 1px solid #aaa !important;
   border-radius: 4px !important;
 }
+
+.timepicker {
+  position: relative !important;
+}

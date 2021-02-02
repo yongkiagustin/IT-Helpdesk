@@ -120,53 +120,46 @@ if (empty($_SESSION['username'])) {
             <h4 class="header"></h4>
             <!-- <a href="input-tiket.php" class="btn-floating btn-small waves-effect waves-light green darken-2" title="Tambah Tiket"><i class="mdi-content-add"></i></a>-->
             <a href="tiket-export-xls.php" class="btn-floating btn-small waves-effect waves-light orange darken-2" title="Export Excel"><i class="mdi-content-content-copy"></i></a>
+            <br />
+            <br />
+            <form id="search">
+              <label for="">Filter Tanggal</label>
+              <input type="text" class="search_date">
+              <button type="submit">Cari</button>
+            </form>
             <br /><br />
             <div class="row">
               <div class="col s12 m12">
                 <table id="lookup" class="responsive-table display" cellspacing="0">
                   <thead>
                     <tr>
-
                       <th>Id Tiket</th>
                       <th>Tanggal</th>
                       <th>No Asset Perangkat</th>
                       <th>Nama</th>
-                      <th>Email</th>
                       <th>Departemen</th>
                       <th>Problem</th>
-                      <th>Penanganan  </th>
+                      <th>Penanggung Jawab</th>
+                      <th>Penanganan</th>
+                      <th>Tanggal Penanganan</th>
                       <th>Status</th>
                       <th>Tool</th>
-
-
                     </tr>
                   </thead>
-
-                  <tbody>
-
-                  </tbody>
+                  <tbody></tbody>
                 </table>
               </div>
             </div>
           </div>
-
-
-
-
         </div>
-
       </div>
       <!--end container-->
-
       </section>
       <!-- END CONTENT -->
     </div>
     <!-- END WRAPPER -->
-
     </div>
     <!-- END MAIN -->
-
-
 
     <!-- //////////////////////////////////////////////////////////////////////////// -->
 
@@ -204,15 +197,27 @@ if (empty($_SESSION['username'])) {
           "ajax": {
             url: "ajax-grid-data1.php", // json datasource
             type: "post", // method  , by default get
+            data: function(d) {
+              d.search_date = $(".search_date").val()
+            },
             error: function() { // error handling
               $(".lookup-error").html("");
               $("#lookup").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
               $("#lookup_processing").css("display", "none");
-
             }
           }
+
         });
+
+        $("#search").on("submit", function(e) {
+          dataTable.ajax.reload();
+          return false;
+        })
       });
+
+      $(".search_date").pickadate({
+        format: "yyyy-mm-dd"
+      })
     </script>
 
   </body>

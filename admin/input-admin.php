@@ -85,7 +85,7 @@ if (empty($_SESSION['username'])) {
 
           <?php
           if (isset($_POST['input'])) {
-            $namafolder = "gambar_admin/"; //tempat menyimpan file
+            $namafolder = "../foto/"; //tempat menyimpan file
 
 
             if (!empty($_FILES["nama_file"]["tmp_name"])) {
@@ -93,21 +93,24 @@ if (empty($_SESSION['username'])) {
               $username = $_POST['username'];
               $password = $_POST['password'];
               $fullname = $_POST['fullname'];
+              $departement = $_POST['departement_id'];
               $no_hp = $_POST['no_hp'];
               $level = $_POST['level'];
 
               if ($jenis_gambar == "image/jpeg" || $jenis_gambar == "image/jpg" || $jenis_gambar == "image/gif" || $jenis_gambar == "image/x-png") {
                 $gambar = $namafolder . basename($_FILES['nama_file']['name']);
                 if (move_uploaded_file($_FILES['nama_file']['tmp_name'], $gambar)) {
-                  $sql = "INSERT INTO user (username,password,fullname,no_hp,level,gambar) VALUES
-            ('$username','$password','$fullname','$no_hp','$level','$gambar')";
+                  $sql = "INSERT INTO user (username,password,fullname,no_hp,level,gambar,departement_id) VALUES
+            ('$username','$password','$fullname','$no_hp','$level','$gambar', '$departement')";
                   $res = mysqli_query($koneksi, $sql) or die(mysqli_error());
                   //echo "Gambar berhasil dikirim ke direktori".$gambar;
                   echo '<script>sweetAlert({
 	                                                   title: "Berhasil!", 
                                                         text: "Data Berhasil ditambahkan!", 
                                                         type: "success",
-                                                        });</script>';
+                                                        }, function(){
+                                                          window.location.replace("admin.php");
+                                                          });</script>';
                 } else {
                   echo '<script>sweetAlert({
 	                                                   title: "Gagal!", 
@@ -163,7 +166,18 @@ if (empty($_SESSION['username'])) {
                   </div>
                   <div class="row">
                     <div class="input-field col s12">
-
+                      <select class="select2 form-control" name="departement_id">
+                        <?php
+                        $asset = mysqli_query($koneksi, "SELECT * FROM departement");
+                        foreach (mysqli_fetch_all($asset) as $asset) {
+                          echo "<option value='" . $asset[0] . "'> Departemen " . $asset[1] . "</option>";
+                        }
+                        ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
                       <select name="level" id="level" required>
                         <option value=""> -- Pilih Level Akses --</option>
                         <option value="Admin">Admin</option>
@@ -188,11 +202,6 @@ if (empty($_SESSION['username'])) {
             </div>
           </div>
         </div>
-
-
-
-
-
       </div>
 
     </div>
@@ -232,6 +241,7 @@ if (empty($_SESSION['username'])) {
     <script type="text/javascript" src="js/plugins/data-tables/data-tables-script.js"></script>
     <!-- chartist -->
     <script type="text/javascript" src="js/plugins/chartist-js/chartist.min.js"></script>
+    <script type="text/javascript" src="js/plugins/select2/select2.min.js"></script>
 
     <!--plugins.js - Some Specific JS codes for Plugin Settings-->
     <script type="text/javascript" src="js/plugins.js"></script>
@@ -252,6 +262,10 @@ if (empty($_SESSION['username'])) {
             }
           }
         });
+      });
+
+      $(".select2").select2({
+        width: "100%"
       });
     </script>
 
